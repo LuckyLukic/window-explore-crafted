@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Linkedin, Instagram } from "lucide-react";
+import logo from "@/assets/sicopack-logo.png";
 
 const Footer = () => {
   return (
@@ -8,7 +9,10 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
           <div>
-            <h3 className="text-2xl font-bold font-playfair mb-4">PACKAGING</h3>
+            <div className="flex items-center space-x-2 mb-4">
+              <img src={logo} alt="Sicopack Logo" className="h-10 w-10" />
+              <h3 className="text-2xl font-bold font-playfair">Sicopack</h3>
+            </div>
             <p className="text-background/80 mb-4">
               Premium packaging solutions for your products
             </p>
@@ -97,7 +101,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-background/20 pt-8 text-center text-background/60">
-          <p>&copy; {new Date().getFullYear()} Packaging Solutions. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Sicopack. All rights reserved.</p>
         </div>
       </div>
     </footer>
