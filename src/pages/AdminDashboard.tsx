@@ -8,6 +8,7 @@ import CategoriesManager from "@/components/admin/CategoriesManager";
 import ProductsManager from "@/components/admin/ProductsManager";
 import SiteSettingsManager from "@/components/admin/SiteSettingsManager";
 import PageBackgroundsManager from "@/components/admin/PageBackgroundsManager";
+import AdminsManager from "@/components/admin/AdminsManager";
 
 const AdminDashboard = () => {
   const { user, loading, isAdmin, signOut } = useAuth();
@@ -49,11 +50,12 @@ const AdminDashboard = () => {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="categories" className="space-y-8">
-          <TabsList className="grid w-full max-w-4xl grid-cols-4">
+          <TabsList className="grid w-full max-w-5xl grid-cols-5">
             <TabsTrigger value="categories">Categories</TabsTrigger>
             <TabsTrigger value="products">Products</TabsTrigger>
             <TabsTrigger value="settings">Site Settings</TabsTrigger>
             <TabsTrigger value="backgrounds">Page Backgrounds</TabsTrigger>
+            <TabsTrigger value="admins">Admins</TabsTrigger>
           </TabsList>
 
           <TabsContent value="categories">
@@ -70,6 +72,10 @@ const AdminDashboard = () => {
 
           <TabsContent value="backgrounds">
             <PageBackgroundsManager />
+          </TabsContent>
+
+          <TabsContent value="admins">
+            <AdminsManager />
           </TabsContent>
         </Tabs>
       </main>
