@@ -4,6 +4,8 @@ import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
+import HeroBackground from "@/components/HeroBackground";
+import { usePageBackground } from "@/hooks/usePageBackground";
 
 const CategoryPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -39,19 +41,23 @@ const CategoryPage = () => {
     enabled: !!category?.id
   });
 
+  const background = usePageBackground(category);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
+      <HeroBackground
+        desktopUrl={background.desktopUrl}
+        mobileUrl={background.mobileUrl}
+        overlay={background.overlay}
+        title={category?.name}
+      >
+        <Link to="/" className="text-primary hover:underline inline-block">
+          ← Back to Categories
+        </Link>
+      </HeroBackground>
       <main className="flex-1 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12">
-            <Link to="/" className="text-primary hover:underline mb-4 inline-block">
-              ← Back to Categories
-            </Link>
-            <h1 className="text-5xl font-bold font-playfair text-foreground mb-4">
-              {category?.name}
-            </h1>
-          </div>
 
           {isLoading ? (
             <div className="text-center py-12">Loading products...</div>

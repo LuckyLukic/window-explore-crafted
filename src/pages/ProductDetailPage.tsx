@@ -4,6 +4,8 @@ import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useState } from "react";
+import HeroBackground from "@/components/HeroBackground";
+import { usePageBackground } from "@/hooks/usePageBackground";
 
 const ProductDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -49,20 +51,26 @@ const ProductDetailPage = () => {
 
   const mainImage = selectedImage || product.cover_image_url;
   const allImages = [product.cover_image_url, ...(product.detail_images_urls || [])];
+  const background = usePageBackground(product);
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
+      <HeroBackground
+        desktopUrl={background.desktopUrl}
+        mobileUrl={background.mobileUrl}
+        overlay={background.overlay}
+        title={product.name}
+      >
+        <Link 
+          to={`/c/${product.category.slug}`} 
+          className="text-primary hover:underline inline-block"
+        >
+          ← Back to {product.category.name}
+        </Link>
+      </HeroBackground>
       <main className="flex-1 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8">
-            <Link 
-              to={`/c/${product.category.slug}`} 
-              className="text-primary hover:underline inline-block"
-            >
-              ← Back to {product.category.name}
-            </Link>
-          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Image Gallery */}
@@ -99,9 +107,6 @@ const ProductDetailPage = () => {
 
             {/* Product Info */}
             <div>
-              <h1 className="text-5xl font-bold font-playfair text-foreground mb-6">
-                {product.name}
-              </h1>
               <div className="prose prose-lg max-w-none">
                 <p className="text-muted-foreground whitespace-pre-wrap">
                   {product.description}

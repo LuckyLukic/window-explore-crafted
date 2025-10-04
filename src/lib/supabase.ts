@@ -30,3 +30,24 @@ export async function deleteImage(url: string): Promise<void> {
     await supabase.storage.from('media').remove([path]);
   }
 }
+
+// Helper to upload background image to storage
+export async function uploadBackgroundImage(file: File): Promise<string> {
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${Math.random()}.${fileExt}`;
+  const filePath = `backgrounds/${fileName}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from('media')
+    .upload(filePath, file);
+
+  if (uploadError) {
+    throw uploadError;
+  }
+
+  const { data } = supabase.storage
+    .from('media')
+    .getPublicUrl(filePath);
+
+  return data.publicUrl;
+}

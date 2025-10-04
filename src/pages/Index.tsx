@@ -4,6 +4,8 @@ import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
+import HeroBackground from "@/components/HeroBackground";
+import { usePageBackground } from "@/hooks/usePageBackground";
 
 const Index = () => {
   const { data: categories, isLoading } = useQuery({
@@ -19,19 +21,20 @@ const Index = () => {
     }
   });
 
+  const background = usePageBackground();
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
+      <HeroBackground
+        desktopUrl={background.desktopUrl}
+        mobileUrl={background.mobileUrl}
+        overlay={background.overlay}
+        title="Our Product Categories"
+        subtitle="Explore our comprehensive range of premium packaging solutions"
+      />
       <main className="flex-1 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h1 className="text-6xl font-bold font-playfair text-foreground mb-4">
-              Our Product Categories
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Explore our comprehensive range of premium packaging solutions
-            </p>
-          </div>
 
           {isLoading ? (
             <div className="text-center py-12">Loading categories...</div>

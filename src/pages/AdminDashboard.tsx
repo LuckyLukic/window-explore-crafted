@@ -6,6 +6,8 @@ import { LogOut } from "lucide-react";
 import { toast } from "sonner";
 import CategoriesManager from "@/components/admin/CategoriesManager";
 import ProductsManager from "@/components/admin/ProductsManager";
+import SiteSettingsManager from "@/components/admin/SiteSettingsManager";
+import PageBackgroundsManager from "@/components/admin/PageBackgroundsManager";
 
 const AdminDashboard = () => {
   const { user, loading, isAdmin, signOut } = useAuth();
@@ -47,9 +49,11 @@ const AdminDashboard = () => {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="categories" className="space-y-8">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
+          <TabsList className="grid w-full max-w-4xl grid-cols-4">
             <TabsTrigger value="categories">Categories</TabsTrigger>
             <TabsTrigger value="products">Products</TabsTrigger>
+            <TabsTrigger value="settings">Site Settings</TabsTrigger>
+            <TabsTrigger value="backgrounds">Page Backgrounds</TabsTrigger>
           </TabsList>
 
           <TabsContent value="categories">
@@ -58,6 +62,14 @@ const AdminDashboard = () => {
 
           <TabsContent value="products">
             <ProductsManager />
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <SiteSettingsManager />
+          </TabsContent>
+
+          <TabsContent value="backgrounds">
+            <PageBackgroundsManager />
           </TabsContent>
         </Tabs>
       </main>

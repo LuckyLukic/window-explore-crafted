@@ -26,32 +26,79 @@ export type Database = {
         }
         Relationships: []
       }
+      page_backgrounds: {
+        Row: {
+          active: boolean | null
+          bg_desktop_url: string | null
+          bg_mobile_url: string | null
+          created_at: string | null
+          id: string
+          overlay_opacity: number | null
+          path_pattern: string
+          priority: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          bg_desktop_url?: string | null
+          bg_mobile_url?: string | null
+          created_at?: string | null
+          id?: string
+          overlay_opacity?: number | null
+          path_pattern: string
+          priority?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          bg_desktop_url?: string | null
+          bg_mobile_url?: string | null
+          created_at?: string | null
+          id?: string
+          overlay_opacity?: number | null
+          path_pattern?: string
+          priority?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       product_categories: {
         Row: {
+          bg_desktop_url: string | null
+          bg_mobile_url: string | null
           cover_image_url: string | null
           created_at: string
           id: string
           name: string
+          overlay_opacity: number | null
           slug: string
         }
         Insert: {
+          bg_desktop_url?: string | null
+          bg_mobile_url?: string | null
           cover_image_url?: string | null
           created_at?: string
           id?: string
           name: string
+          overlay_opacity?: number | null
           slug: string
         }
         Update: {
+          bg_desktop_url?: string | null
+          bg_mobile_url?: string | null
           cover_image_url?: string | null
           created_at?: string
           id?: string
           name?: string
+          overlay_opacity?: number | null
           slug?: string
         }
         Relationships: []
       }
       products: {
         Row: {
+          bg_desktop_url: string | null
+          bg_mobile_url: string | null
           category_id: string
           cover_image_url: string
           created_at: string
@@ -59,10 +106,13 @@ export type Database = {
           detail_images_urls: string[] | null
           id: string
           name: string
+          overlay_opacity: number | null
           slug: string
           updated_at: string
         }
         Insert: {
+          bg_desktop_url?: string | null
+          bg_mobile_url?: string | null
           category_id: string
           cover_image_url: string
           created_at?: string
@@ -70,10 +120,13 @@ export type Database = {
           detail_images_urls?: string[] | null
           id?: string
           name: string
+          overlay_opacity?: number | null
           slug: string
           updated_at?: string
         }
         Update: {
+          bg_desktop_url?: string | null
+          bg_mobile_url?: string | null
           category_id?: string
           cover_image_url?: string
           created_at?: string
@@ -81,6 +134,7 @@ export type Database = {
           detail_images_urls?: string[] | null
           id?: string
           name?: string
+          overlay_opacity?: number | null
           slug?: string
           updated_at?: string
         }
@@ -93,6 +147,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      site_settings: {
+        Row: {
+          bg_desktop_url: string | null
+          bg_mobile_url: string | null
+          created_at: string | null
+          id: string
+          overlay_opacity: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          bg_desktop_url?: string | null
+          bg_mobile_url?: string | null
+          created_at?: string | null
+          id?: string
+          overlay_opacity?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          bg_desktop_url?: string | null
+          bg_mobile_url?: string | null
+          created_at?: string | null
+          id?: string
+          overlay_opacity?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {
