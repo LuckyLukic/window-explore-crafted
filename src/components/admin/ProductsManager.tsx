@@ -35,6 +35,7 @@ const ProductsManager = () => {
   });
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
   const [detailImageFiles, setDetailImageFiles] = useState<File[]>([]);
+  const [detailImagePreviews, setDetailImagePreviews] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const queryClient = useQueryClient();
@@ -173,6 +174,7 @@ const ProductsManager = () => {
     setEditingProduct(null);
     setCoverImageFile(null);
     setDetailImageFiles([]);
+    setDetailImagePreviews([]);
     setIsDialogOpen(false);
   };
 
@@ -203,6 +205,20 @@ const ProductsManager = () => {
       ...formData,
       detail_images_urls: formData.detail_images_urls.filter((_, i) => i !== index)
     });
+  };
+
+  const removeDetailImageFile = (index: number) => {
+    setDetailImageFiles(detailImageFiles.filter((_, i) => i !== index));
+    setDetailImagePreviews(detailImagePreviews.filter((_, i) => i !== index));
+  };
+
+  const handleDetailImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setDetailImageFiles([...detailImageFiles, ...files]);
+    
+    // Create preview URLs for new files
+    const newPreviews = files.map(file => URL.createObjectURL(file));
+    setDetailImagePreviews([...detailImagePreviews, ...newPreviews]);
   };
 
   return (
@@ -305,24 +321,55 @@ const ProductsManager = () => {
                     type="file"
                     accept="image/*"
                     multiple
-                    onChange={(e) => setDetailImageFiles(Array.from(e.target.files || []))}
+                    onChange={handleDetailImagesChange}
                   />
+                  <p className="text-sm text-muted-foreground mt-1">
+                    You can select multiple images at once, or add more images by selecting files again
+                  </p>
+                  
+                  {/* Existing saved images */}
                   {formData.detail_images_urls.length > 0 && (
-                    <div className="mt-2 grid grid-cols-4 gap-2">
-                      {formData.detail_images_urls.map((url, idx) => (
-                        <div key={idx} className="relative">
-                          <img src={url} alt={`Detail ${idx + 1}`} className="w-full h-20 object-cover rounded" />
-                          <Button
-                            type="button"
-                            variant="destructive"
-                            size="sm"
-                            className="absolute top-0 right-0 h-6 w-6 p-0"
-                            onClick={() => removeDetailImage(idx)}
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ))}
+                    <div className="mt-4">
+                      <p className="text-sm font-medium mb-2">Saved Gallery Images</p>
+                      <div className="grid grid-cols-4 gap-2">
+                        {formData.detail_images_urls.map((url, idx) => (
+                          <div key={`saved-${idx}`} className="relative">
+                            <img src={url} alt={`Detail ${idx + 1}`} className="w-full h-20 object-cover rounded" />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              className="absolute top-0 right-0 h-6 w-6 p-0"
+                              onClick={() => removeDetailImage(idx)}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* New images to be uploaded */}
+                  {detailImageFiles.length > 0 && (
+                    <div className="mt-4">
+                      <p className="text-sm font-medium mb-2">New Images to Upload ({detailImageFiles.length})</p>
+                      <div className="grid grid-cols-4 gap-2">
+                        {detailImagePreviews.map((preview, idx) => (
+                          <div key={`new-${idx}`} className="relative">
+                            <img src={preview} alt={`New ${idx + 1}`} className="w-full h-20 object-cover rounded" />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              className="absolute top-0 right-0 h-6 w-6 p-0"
+                              onClick={() => removeDetailImageFile(idx)}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
