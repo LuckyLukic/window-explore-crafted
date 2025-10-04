@@ -21,47 +21,21 @@ const AdminsManager = () => {
   const { data: admins, isLoading } = useQuery<AdminWithEmail[]>({
     queryKey: ['admins'],
     queryFn: async () => {
-      // Get all admin user IDs
-      const { data: adminData, error: adminError } = await supabase
-        .from('admins')
-        .select('user_id');
+      const { data, error } = await supabase.rpc('list_admins');
       
-      if (adminError) throw adminError;
+      if (error) throw error;
       
-      // Get user details from auth
-      const { data: { users }, error: usersError } = await supabase.auth.admin.listUsers();
-      
-      if (usersError) throw usersError;
-      
-      // Match admins with user emails
-      return adminData?.map(admin => {
-        const user = users.find((u: User) => u.id === admin.user_id);
-        return {
-          user_id: admin.user_id,
-          email: user?.email || 'Unknown'
-        };
-      }) || [];
+      return data || [];
     }
   });
 
   const addAdminMutation = useMutation({
     mutationFn: async (adminEmail: string) => {
-      // Get all users from auth
-      const { data: { users }, error: usersError } = await supabase.auth.admin.listUsers();
-      
-      if (usersError) throw usersError;
-      
-      const user = users.find((u: User) => u.email === adminEmail);
-      
-      if (!user) {
-        throw new Error('User not found. They must sign up first.');
-      }
+      const { error } = await supabase.rpc('add_admin_by_email', { 
+        admin_email: adminEmail 
+      });
 
-      const { error: insertError } = await supabase
-        .from('admins')
-        .insert({ user_id: user.id });
-
-      if (insertError) throw insertError;
+      if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admins'] });
