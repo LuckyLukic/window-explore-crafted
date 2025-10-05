@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -9,20 +11,25 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import ContactDialog from "@/components/ContactDialog";
 import logo from "@/assets/sicopack-logo.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [contactDialogOpen, setContactDialogOpen] = useState(false);
 
-  const productCategories = [
-    { name: "All Products", href: "/catalog" },
-    { name: "Cosmetics & Perfumery", href: "/catalog/cosmetics" },
-    { name: "Cleaning", href: "/catalog/cleaning" },
-    { name: "Pharma", href: "/catalog/pharma" },
-    { name: "Food Pack", href: "/catalog/food" },
-    { name: "Pet Care", href: "/catalog/pet" },
-    { name: "Professional", href: "/catalog/professional" },
-  ];
+  const { data: categories } = useQuery({
+    queryKey: ["product-categories"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("product_categories")
+        .select("id, name, slug")
+        .order("name");
+      
+      if (error) throw error;
+      return data;
+    },
+  });
 
   return (
     <nav className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
@@ -59,10 +66,16 @@ const Navbar = () => {
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <div className="w-64 p-4">
-                      {productCategories.map((category) => (
+                      <Link
+                        to="/"
+                        className="block px-4 py-3 text-sm text-foreground hover:bg-secondary rounded-md transition-colors font-semibold"
+                      >
+                        All Products
+                      </Link>
+                      {categories?.map((category) => (
                         <Link
-                          key={category.name}
-                          to={category.href}
+                          key={category.id}
+                          to={`/c/${category.slug}`}
                           className="block px-4 py-3 text-sm text-foreground hover:bg-secondary rounded-md transition-colors"
                         >
                           {category.name}
@@ -73,22 +86,9 @@ const Navbar = () => {
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
-
-            <Link
-              to="/sustainability"
-              className="text-foreground hover:text-primary transition-colors font-medium"
-            >
-              Sustainability
-            </Link>
-            <Link
-              to="/news"
-              className="text-foreground hover:text-primary transition-colors font-medium"
-            >
-              News
-            </Link>
             
-            <Button asChild>
-              <Link to="/contact">Contact Us</Link>
+            <Button onClick={() => setContactDialogOpen(true)}>
+              Contact Us
             </Button>
           </div>
 
@@ -119,40 +119,39 @@ const Navbar = () => {
               Company
             </Link>
             <div className="px-4 py-2 text-foreground font-medium">Catalog</div>
-            {productCategories.map((category) => (
+            <Link
+              to="/"
+              className="block pl-8 py-2 text-sm font-semibold text-foreground hover:bg-secondary rounded-md"
+              onClick={() => setIsOpen(false)}
+            >
+              All Products
+            </Link>
+            {categories?.map((category) => (
               <Link
-                key={category.name}
-                to={category.href}
+                key={category.id}
+                to={`/c/${category.slug}`}
                 className="block pl-8 py-2 text-sm text-muted-foreground hover:bg-secondary rounded-md"
                 onClick={() => setIsOpen(false)}
               >
                 {category.name}
               </Link>
             ))}
-            <Link
-              to="/sustainability"
-              className="block px-4 py-2 text-foreground hover:bg-secondary rounded-md"
-              onClick={() => setIsOpen(false)}
-            >
-              Sustainability
-            </Link>
-            <Link
-              to="/news"
-              className="block px-4 py-2 text-foreground hover:bg-secondary rounded-md"
-              onClick={() => setIsOpen(false)}
-            >
-              News
-            </Link>
             <div className="px-4 pt-2">
-              <Button asChild className="w-full">
-                <Link to="/contact" onClick={() => setIsOpen(false)}>
-                  Contact Us
-                </Link>
+              <Button 
+                className="w-full"
+                onClick={() => {
+                  setIsOpen(false);
+                  setContactDialogOpen(true);
+                }}
+              >
+                Contact Us
               </Button>
             </div>
           </div>
         )}
       </div>
+      
+      <ContactDialog open={contactDialogOpen} onOpenChange={setContactDialogOpen} />
     </nav>
   );
 };
