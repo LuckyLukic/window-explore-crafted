@@ -12,7 +12,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import ContactDialog from "@/components/ContactDialog";
-import logo from "@/assets/sicopack-logo.png";
+import logo from "@/assets/logo-sicopack.gif";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);

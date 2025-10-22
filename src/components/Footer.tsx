@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Linkedin, Instagram } from "lucide-react";
-import logo from "@/assets/sicopack-logo.png";
+import logo from "@/assets/logo-sicopack.gif";
 
 const Footer = () => {
   return (
